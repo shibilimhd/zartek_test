@@ -2,9 +2,12 @@ import React from "react";
 import { Grid, Typography, Box, Badge } from "@mui/material";
 import { useSelector } from "react-redux";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { styled } from "@mui/material/styles";
+import { useDevice } from "../hooks/useResponsive";
 
 function Header({ name }) {
+  const { isMobile } = useDevice();
   const { cart } = useSelector((state) => ({
     cart: state.category.cartTotal,
   }));
@@ -19,18 +22,20 @@ function Header({ name }) {
   }));
 
   return (
-    <Grid>
-      <Box
-        display={"flex"}
-        justifyContent={"space-between"}
-        pt={3}
-        alignItems={"center"}
-      >
-        <Typography color={"grey"} variant="h5" fontWeight={"bold"}>
-          {name}
-        </Typography>
+    <Box>
+      <Grid pt={3} className="header-main">
+        {isMobile ? (
+          <Typography variant="h5" className="header-name">
+            <ArrowBackIcon sx={{ pr: "10px" }} />
+            {name}
+          </Typography>
+        ) : (
+          <Typography variant="h5" className="header-name">
+            {name}
+          </Typography>
+        )}
         <Box display={"flex"}>
-          <Typography color={"grey"} px={1}>
+          <Typography fontFamily={"TomatoGrotesk"} color={"grey"} px={1}>
             My Orders
           </Typography>
           <StyledBadge
@@ -41,8 +46,8 @@ function Header({ name }) {
             <ShoppingCartIcon color="disabled" />
           </StyledBadge>
         </Box>
-      </Box>
-    </Grid>
+      </Grid>
+    </Box>
   );
 }
 

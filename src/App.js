@@ -1,6 +1,7 @@
 import { Provider } from "react-redux";
-import CategoryList from "./categoryList";
 import store from "./store/store";
+import CategoryList from "./pages/categoryList";
+import "./style/style.scss";
 
 function App() {
   return (
