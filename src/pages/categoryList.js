@@ -99,13 +99,14 @@ function CategoryList() {
                             ? "#d32f2f"
                             : "grey"
                         }
-                        variant="h6"
                         borderBottom={
                           activeTab === item?.menu_category_id
                             ? "3px solid #d32f2f"
                             : "none"
                         }
                         className="category-title"
+                        variant="h6"
+                        pb={1}
                         onClick={() => setActiveTab(item?.menu_category_id)}
                       >
                         {item?.menu_category}
