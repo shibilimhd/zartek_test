@@ -228,7 +228,7 @@ function CategoryList() {
                       />
                     </Box>
                     <Box mx={1}>
-                      <Typography fontWeight={"bold"} width={"250px"}>
+                      <Typography fontWeight={"bold"} width={"240px"}>
                         {dish?.dish_name}
                       </Typography>
                       <Typography variant="button">
@@ -262,8 +262,8 @@ function CategoryList() {
                     mt={1}
                   >
                     <Typography
-                      variant="body2"
-                      fontWeight={"bold"}
+                      variant="caption"
+                      fontWeight={"700"}
                       px={"6px"}
                       color={"#302e2e"}
                     >
