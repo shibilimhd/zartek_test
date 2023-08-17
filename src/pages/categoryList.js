@@ -27,10 +27,10 @@ function CategoryList() {
   const [activeTab, setActiveTab] = useState("11");
 
   const [dishes, setDishes] = useState([]);
+  const [categoryTotalCounts, setCategoryTotalCounts] = useState({});
 
   const handleCart = (selectedDish, type) => {
     if (type === "add") {
-      // update current dish data
       const currentDish = dishes?.map((filteredDish) =>
         filteredDish?.dish_id === selectedDish?.dish_id
           ? {
@@ -40,6 +40,11 @@ function CategoryList() {
           : filteredDish
       );
       setDishes(currentDish);
+
+      setCategoryTotalCounts((prevCounts) => ({
+        ...prevCounts,
+        [activeTab]: prevCounts[activeTab] ? prevCounts[activeTab] + 1 : 1,
+      }));
     } else if (type === "remove") {
       const currentDish = dishes?.map((currentDish) =>
         currentDish?.dish_id === selectedDish?.dish_id
@@ -50,6 +55,11 @@ function CategoryList() {
           : currentDish
       );
       setDishes(currentDish);
+
+      setCategoryTotalCounts((prevCounts) => ({
+        ...prevCounts,
+        [activeTab]: prevCounts[activeTab] > 0 ? prevCounts[activeTab] - 1 : 0,
+      }));
     }
   };
 
@@ -57,22 +67,31 @@ function CategoryList() {
     const filteredDishesByCategory = categoryList?.table_menu_list?.filter(
       (menuCategory) => menuCategory?.menu_category_id === activeTab
     );
+
     const modifiedDishData =
       filteredDishesByCategory?.[0]?.category_dishes?.map((dishItem) => ({
         ...dishItem,
         count: 0,
       }));
     setDishes(modifiedDishData);
+
+    if (!categoryTotalCounts[activeTab]) {
+      setCategoryTotalCounts((prevCounts) => ({
+        ...prevCounts,
+        [activeTab]: 0,
+      }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeTab, categoryList]);
 
+  const totalCount = Object.values(categoryTotalCounts).reduce(
+    (acc, count) => acc + count,
+    0
+  );
+
   useEffect(() => {
-    if (dishes?.length >= 1) {
-      const sumOfCounts = dishes?.reduce((accumulator, currentValue) => {
-        return accumulator + currentValue.count;
-      }, 0);
-      dispatch(cartCount(sumOfCounts));
-    }
-  }, [dishes, dispatch]);
+    dispatch(cartCount(totalCount));
+  }, [dispatch, totalCount]);
 
   return (
     <>
@@ -142,7 +161,10 @@ function CategoryList() {
                           {dish?.dish_description}
                         </Typography>
                         <Grid className="addOn_div" my={1}>
-                          <Button onClick={() => handleCart(dish, "remove")}>
+                          <Button
+                            onClick={() => handleCart(dish, "remove")}
+                            disabled={dish?.count === 0}
+                          >
                             <RemoveIcon className="white-color" />
                           </Button>
                           <Typography className="white-color">
