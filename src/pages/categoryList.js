@@ -260,7 +260,10 @@ function CategoryList() {
                         {dish?.dish_description}
                       </Typography>
                       <Grid className="addOn_div" my={1}>
-                        <Button onClick={() => handleCart(dish, "remove")}>
+                        <Button
+                          onClick={() => handleCart(dish, "remove")}
+                          disabled={dish?.count === 0}
+                        >
                           <RemoveIcon sx={{ color: "white" }} />
                         </Button>
                         <Typography color={"white"}>{dish?.count}</Typography>
